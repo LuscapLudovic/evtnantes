@@ -37,6 +37,9 @@
         .author, .date {
             font-weight: bold;
         }
+        .nom{
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -47,7 +50,7 @@
         <li v-for="record in commits">
             <span class="nom">{{ record.fields.nom | truncate }}</span>
             <span class="date">{{ record.fields.date | formatDate }}</span>
-            <span class="lieu">{{ record.fields.lieu }}</span><br>
+            <span class="lieu" style="color: red">{{ record.fields.lieu }}</span><br>
             <span class="description">{{ record.fields.description }}</span><br>
             <img :src="record.fields.media_1" width="90" height="90">
         </li>
