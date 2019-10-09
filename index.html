@@ -23,7 +23,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>commits-example</title>
     <style>
-        #demo {
+        #boite {
             font-family: 'Helvetica', Arial, sans-serif;
         }
         a {
@@ -42,6 +42,7 @@
 <body>
 <div id="boite">
     <h1>Event</h1>
+    <input type="text" v-model="query">
     <ul>
         <li v-for="record in commits">
             <span class="nom">{{ record.fields.nom | truncate }}</span>
@@ -55,7 +56,7 @@
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
-    var apiURL = 'https://data.nantesmetropole.fr/api/records/1.0/search/?dataset=244400404_agenda-evenements-nantes-nantes-metropole&facet=emetteur&facet=rubrique&facet=lieu&facet=ville'
+    var apiURL = 'https://data.nantesmetropole.fr/api/records/1.0/search/?dataset=244400404_agenda-evenements-nantes-nantes-metropole&facet=emetteur&facet=rubrique&facet=lieu&facet=ville&q='
 
     /**
      * Actual demo
@@ -66,7 +67,8 @@
         el: '#boite',
 
         data: {
-            commits: null
+            commits: null,
+            query: ""
         },
 
         created: function () {
@@ -74,7 +76,7 @@
         },
 
         watch: {
-            currentBranch: 'fetchData'
+            query: 'fetchData'
         },
 
         filters: {
@@ -89,7 +91,7 @@
 
         methods: {
             fetchData: function () {
-                axios.get(apiURL + self)
+                axios.get(apiURL + this.query)
                     .then( res => {
                         this.commits = res.data.records
                         console.log(res.data)
