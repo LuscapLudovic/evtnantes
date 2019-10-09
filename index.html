@@ -42,7 +42,7 @@
 <body>
 <div id="boite">
     <h1>Event</h1>
-    <input type="text" v-model="query">
+    <input type="text" v-model.lazy="query">
     <ul>
         <li v-for="record in commits">
             <span class="nom">{{ record.fields.nom | truncate }}</span>
