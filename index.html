@@ -1,0 +1,105 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--  <meta charset="utf-8">-->
+<!--  <meta http-equiv="X-UA-Compatible" content="IE=edge">-->
+<!--  <meta name="viewport" content="width=device-width,initial-scale=1.0">-->
+<!--  <link rel="icon" href="<%= BASE_URL %>favicon.ico">-->
+<!--  <title>projet-vue</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<noscript>-->
+<!--  <strong>We're sorry but projet-vue doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>-->
+<!--</noscript>-->
+<!--<div id="app"></div>-->
+<!--&lt;!&ndash; built files will be auto injected &ndash;&gt;-->
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>commits-example</title>
+    <style>
+        #demo {
+            font-family: 'Helvetica', Arial, sans-serif;
+        }
+        a {
+            text-decoration: none;
+            color: #f66;
+        }
+        li {
+            line-height: 1.5em;
+            margin-bottom: 20px;
+        }
+        .author, .date {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div id="boite">
+    <h1>Event</h1>
+    <ul>
+        <li v-for="record in commits">
+            <span class="nom">{{ record.fields.nom | truncate }}</span>
+            <span class="date">{{ record.fields.date | formatDate }}</span>
+            <span class="lieu">{{ record.fields.lieu }}</span><br>
+            <span class="description">{{ record.fields.description }}</span><br>
+            <img :src="record.fields.media_1" width="90" height="90">
+        </li>
+    </ul>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    var apiURL = 'https://data.nantesmetropole.fr/api/records/1.0/search/?dataset=244400404_agenda-evenements-nantes-nantes-metropole&facet=emetteur&facet=rubrique&facet=lieu&facet=ville'
+
+    /**
+     * Actual demo
+     */
+
+    var boite = new Vue({
+
+        el: '#boite',
+
+        data: {
+            commits: null
+        },
+
+        created: function () {
+            this.fetchData()
+        },
+
+        watch: {
+            currentBranch: 'fetchData'
+        },
+
+        filters: {
+            truncate: function (v) {
+                var newline = v.indexOf('\n')
+                return newline > 0 ? v.slice(0, newline) : v
+            },
+            formatDate: function (v) {
+                return v.replace(/T|Z/g, ' ')
+            }
+        },
+
+        methods: {
+            fetchData: function () {
+                axios.get(apiURL + self)
+                    .then( res => {
+                        this.commits = res.data.records
+                        console.log(res.data)
+                    })
+                    .catch( err => {
+                        console.log(err)
+                    })
+            }
+        }
+    })
+</script>
+</body>
+</html>
